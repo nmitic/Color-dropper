@@ -1,0 +1,91 @@
+:root {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+}
+
+.body--color-dropper-cursor {
+  cursor: url('../IconColorPicker.svg') 8 8, auto;
+}
+
+.magnifier {
+  display: inline-grid;
+  grid-template-columns: repeat(var(--grid-size), var(--cell-size));
+  grid-template-rows: repeat(var(--grid-size), var(--cell-size));
+  gap: 1px;
+  background-color: #e8e8e8;
+  border-radius: 50%;
+  border: 8px solid var(--selected-color);
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.magnifier.magnifier--show {
+  opacity: 1;
+}
+
+.magnifier .pixel.pixel--selected {
+  border: 1px solid white;
+}
+
+.magnifier .color-text {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+
+  color: white;
+  background-color: gray;
+  border-radius: 5px;
+  padding: 4px 8px;
+}
+
+.drop-color-icon {
+  border: none;
+  background-color: #e8e8e8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.drop-color-icon--selected {
+  background-color: #017acd;
+}
+
+.control-panel {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 32px;
+  z-index: 1;
+  background-color: white;
+}
+
+.selected-color {
+  color: black;
+  margin: auto;
+}
