@@ -1,3 +1,3 @@
 export default {
-  base: '/<REPO>/'
+  base: '/Color-dropper/'
 }
