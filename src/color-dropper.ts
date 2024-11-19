@@ -67,6 +67,7 @@ export class ColorDropper {
   private handleColorPick: () => void;
 
   constructor(options: ColorDropperOptions) {
+    // Options
     this.magnifierGridSize = options.magnifierGridSize;
     this.magnifierCellSize = options.magnifierCellSize;
 
@@ -75,6 +76,7 @@ export class ColorDropper {
     this.modifiers = options.modifiers;
     this.cssVars = options.cssVars;
 
+    // DOM elements
     const [magnifier, magnifierPixels, colorText] = this.createMagnifier(
       this.magnifierGridSize,
       this.magnifierCellSize
@@ -94,6 +96,7 @@ export class ColorDropper {
 
     this.DOM__wrapper = document.querySelector(this.selectors.wrapper);
 
+    // Binding handlers so that the reference for add/remove event would be the same and allow for clean up
     this.handleMouseFollow = this.onMouseFollow.bind(this);
     this.handleColorDropper = this.onColorDropper.bind(this);
     this.handleMouseEnterCanvas = this.onMouseEnterCanvas.bind(this);
@@ -113,6 +116,8 @@ export class ColorDropper {
     );
   }
 
+  // Creates magnifier with the correct amount of elements representing pixels
+  // returns elements created
   private createMagnifier(
     magnifierGridSize: number,
     magnifierCellSize: number
@@ -158,7 +163,7 @@ export class ColorDropper {
     this.DOM__magnifier.style.setProperty(this.cssVars.selectedColor, color);
     this.DOM__colorText.textContent = color;
   }
-
+  // Heavy lifting, will go through the array of pixels and paint magnifier
   private paintMagnifier(hexArray: string[]) {
     requestAnimationFrame(() => {
       const fragment = document.createDocumentFragment();
