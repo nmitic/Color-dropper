@@ -5,6 +5,7 @@ type SelectorsType = {
   body: string;
   canvas: string;
   wrapper: string;
+  selectedColorPlaceholder: string;
 };
 
 type ClassNamesType = {
@@ -18,6 +19,7 @@ type ModifiersType = {
   bodyColorDropperCursor: string;
   dropColorIconSelected: string;
   magnifierShow: string;
+  colorDropperActive: string;
 };
 
 type CssVarsType = {
@@ -45,6 +47,8 @@ export class ColorDropper {
   static DOM__magnifier: HTMLDivElement;
   static DOM__magnifierPixels: HTMLDivElement[];
   static DOM__colorText: HTMLDivElement;
+  static DOM__selectedColorPlaceholder: HTMLDivElement | null;
+  static DOM__wrapper: HTMLDivElement | null;
 
   static magnifierGridSize: number;
   static magnifierCellSize: number;
@@ -53,6 +57,14 @@ export class ColorDropper {
   static classNames: ClassNamesType;
   static modifiers: ModifiersType;
   static cssVars: CssVarsType;
+
+  private handleMouseFollow: (event: MouseEvent) => void;
+  private handleColorDropper: (
+    event: CustomEvent<CanvasMoveEventDetailType>
+  ) => void;
+  private handleMouseEnterCanvas: () => void;
+  private handleMouseLeaveCanvas: () => void;
+  private handleColorPick: () => void;
 
   constructor(options: ColorDropperOptions) {
     ColorDropper.magnifierGridSize = options.magnifierGridSize;
@@ -81,6 +93,20 @@ export class ColorDropper {
     ColorDropper.DOM__canvas = document.querySelector(
       ColorDropper.selectors.canvas
     );
+
+    ColorDropper.DOM__selectedColorPlaceholder = document.querySelector(
+      ColorDropper.selectors.selectedColorPlaceholder
+    );
+
+    ColorDropper.DOM__wrapper = document.querySelector(
+      ColorDropper.selectors.wrapper
+    );
+
+    this.handleMouseFollow = this.onMouseFollow.bind(this);
+    this.handleColorDropper = this.onColorDropper.bind(this);
+    this.handleMouseEnterCanvas = this.onMouseEnterCanvas.bind(this);
+    this.handleMouseLeaveCanvas = this.onMouseLeaveCanvas.bind(this);
+    this.handleColorPick = this.onColorPick.bind(this);
   }
 
   init() {
@@ -155,15 +181,18 @@ export class ColorDropper {
   }
 
   private addMagnifier() {
-    document
-      .querySelector(ColorDropper.selectors.wrapper)
-      ?.appendChild(ColorDropper.DOM__magnifier);
+    ColorDropper.DOM__wrapper?.appendChild(ColorDropper.DOM__magnifier);
   }
 
   private removeMagnifier() {
-    document
-      .querySelector(ColorDropper.selectors.wrapper)
-      ?.removeChild(ColorDropper.DOM__magnifier);
+    document;
+    ColorDropper.DOM__wrapper?.removeChild(ColorDropper.DOM__magnifier);
+  }
+
+  private resetSelectedColor() {
+    if (ColorDropper.DOM__selectedColorPlaceholder) {
+      ColorDropper.DOM__selectedColorPlaceholder.textContent = "";
+    }
   }
 
   private toggleColorDropper() {
@@ -181,63 +210,61 @@ export class ColorDropper {
       ColorDropper.modifiers.magnifierShow,
       this.colorDropActive
     );
+    ColorDropper.DOM__wrapper?.classList.toggle(
+      ColorDropper.modifiers.colorDropperActive
+    );
 
     if (this.colorDropActive) {
       this.addEventListeners();
     } else {
+      this.resetSelectedColor();
       this.removeEventListeners();
     }
   }
 
   private addEventListeners() {
-    document.addEventListener("mousemove", this.handleMouseFollow.bind(this));
+    document.addEventListener("mousemove", this.handleMouseFollow);
     document.addEventListener(
       CANVAS_MOUSE_MOVE_EVENT,
-      this.handleColorDropper.bind(this) as EventListener
+      this.handleColorDropper as EventListener
     );
     ColorDropper.DOM__canvas?.addEventListener(
       "mouseenter",
-      this.handleMouseEnterCanvas.bind(this)
+      this.handleMouseEnterCanvas
     );
     ColorDropper.DOM__canvas?.addEventListener(
       "mouseleave",
-      this.handleMouseLeaveCanvas.bind(this)
+      this.handleMouseLeaveCanvas
     );
-    ColorDropper.DOM__canvas?.addEventListener(
-      "click",
-      this.handleColorPick.bind(this)
-    );
+    ColorDropper.DOM__canvas?.addEventListener("click", this.handleColorPick);
   }
 
   private removeEventListeners() {
-    document.removeEventListener(
-      "mousemove",
-      this.handleMouseFollow.bind(this)
-    );
+    document.removeEventListener("mousemove", this.handleMouseFollow);
     document.removeEventListener(
       CANVAS_MOUSE_MOVE_EVENT,
-      this.handleColorDropper.bind(this) as EventListener
+      this.handleColorDropper as EventListener
     );
     ColorDropper.DOM__canvas?.removeEventListener(
       "mouseenter",
-      this.handleMouseEnterCanvas.bind(this)
+      this.handleMouseEnterCanvas
     );
     ColorDropper.DOM__canvas?.removeEventListener(
       "mouseleave",
-      this.handleMouseLeaveCanvas.bind(this)
+      this.handleMouseLeaveCanvas
     );
     ColorDropper.DOM__canvas?.removeEventListener(
       "click",
-      this.handleColorPick.bind(this)
+      this.handleColorPick
     );
   }
 
-  private handleMouseFollow(event: MouseEvent) {
+  private onMouseFollow(event: MouseEvent) {
     const { clientX, clientY } = event;
-    ColorDropper.DOM__magnifier.style.transform = `translate(${clientX}px, ${clientY}px)`;
+    ColorDropper.DOM__magnifier.style.transform = `translate(${clientX}px, ${clientY}px) translate(-50%, -50%)`;
   }
 
-  private handleColorDropper(event: CustomEvent<CanvasMoveEventDetailType>) {
+  private onColorDropper(event: CustomEvent<CanvasMoveEventDetailType>) {
     const { magnifierPixels, selectedPixel } = event.detail;
 
     this.selectedColor = selectedPixel;
@@ -245,20 +272,18 @@ export class ColorDropper {
     this.updateMagnifierColor(selectedPixel);
   }
 
-  private handleMouseEnterCanvas() {
+  private onMouseEnterCanvas() {
     this.addMagnifier();
   }
 
-  private handleMouseLeaveCanvas() {
+  private onMouseLeaveCanvas() {
     this.removeMagnifier();
   }
 
-  private handleColorPick() {
-    const DOM__selectedColor = document.querySelector(
-      ".selected-color"
-    ) as HTMLDivElement;
-    if (DOM__selectedColor) {
-      DOM__selectedColor.textContent = this.selectedColor;
+  private onColorPick() {
+    if (ColorDropper.DOM__selectedColorPlaceholder) {
+      ColorDropper.DOM__selectedColorPlaceholder.textContent =
+        this.selectedColor;
     }
   }
 }

@@ -17,6 +17,10 @@
   margin: 0;
 }
 
+.content.content--color-dropper-active #canvas {
+  cursor: none;
+}
+
 .body--color-dropper-cursor {
   cursor: url('../IconColorPicker.svg') 8 8, auto;
 }
@@ -34,6 +38,7 @@
   top: 0;
   left: 0;
   opacity: 0;
+  pointer-events: none;
 }
 
 .magnifier.magnifier--show {

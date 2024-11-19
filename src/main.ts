@@ -17,6 +17,7 @@ const colorDropper = new ColorDropper({
     body: ".body",
     canvas: Canvas.canvasId,
     wrapper: ".content",
+    selectedColorPlaceholder: ".selected-color",
   },
   classNames: {
     colorText: "color-text",
@@ -28,6 +29,7 @@ const colorDropper = new ColorDropper({
     bodyColorDropperCursor: "body--color-dropper-cursor",
     dropColorIconSelected: "drop-color-icon--selected",
     magnifierShow: "magnifier--show",
+    colorDropperActive: "content--color-dropper-active",
   },
   cssVars: {
     gridSize: "--grid-size",
