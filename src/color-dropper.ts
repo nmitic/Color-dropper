@@ -175,27 +175,44 @@ export class ColorDropper {
   }
 
   private paintMagnifier(hexArray: string[]) {
-    ColorDropper.DOM__magnifierPixels.forEach((div, index) => {
-      if (index < hexArray.length) {
-        div.style.backgroundColor = hexArray[index];
+    requestAnimationFrame(() => {
+      const fragment = document.createDocumentFragment();
+      ColorDropper.DOM__magnifierPixels.forEach((div, index) => {
+        if (index < hexArray.length) {
+          const clone = div.cloneNode(true) as HTMLElement;
+          clone.style.backgroundColor = hexArray[index];
+          fragment.appendChild(clone);
+        }
+      });
+
+      if (ColorDropper.DOM__magnifier) {
+        ColorDropper.DOM__magnifier.innerHTML = "";
+        ColorDropper.DOM__magnifier.appendChild(fragment);
       }
+
+      console.info("Magnifier painted");
     });
-    console.info("Magnifier painted");
   }
 
   private addMagnifier() {
     ColorDropper.DOM__wrapper?.appendChild(ColorDropper.DOM__magnifier);
+
+    console.info("Magnifier added");
   }
 
   private removeMagnifier() {
     document;
     ColorDropper.DOM__wrapper?.removeChild(ColorDropper.DOM__magnifier);
+
+    console.info("Magnifier removed");
   }
 
   private resetSelectedColor() {
     if (ColorDropper.DOM__selectedColorPlaceholder) {
       ColorDropper.DOM__selectedColorPlaceholder.textContent = "";
     }
+
+    console.info("Selected color reset");
   }
 
   private toggleColorDropper() {
@@ -219,9 +236,11 @@ export class ColorDropper {
 
     if (this.colorDropActive) {
       this.addEventListeners();
+      console.info("ColorDropper events added");
     } else {
       this.resetSelectedColor();
       this.removeEventListeners();
+      console.info("ColorDropper events removed");
     }
   }
 
