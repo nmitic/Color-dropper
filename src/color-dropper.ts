@@ -166,19 +166,11 @@ export class ColorDropper {
   // Heavy lifting, will go through the array of pixels and paint magnifier
   private paintMagnifier(hexArray: string[]) {
     requestAnimationFrame(() => {
-      const fragment = document.createDocumentFragment();
       this.DOM__magnifierPixels.forEach((div, index) => {
         if (index < hexArray.length) {
-          const clone = div.cloneNode(true) as HTMLElement;
-          clone.style.backgroundColor = hexArray[index];
-          fragment.appendChild(clone);
+          div.style.backgroundColor = hexArray[index];
         }
       });
-
-      if (this.DOM__magnifier) {
-        this.DOM__magnifier.innerHTML = "";
-        this.DOM__magnifier.appendChild(fragment);
-      }
 
       console.info("Magnifier painted");
     });
