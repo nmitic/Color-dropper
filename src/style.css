@@ -78,9 +78,7 @@
   background-color: #017acd;
 }
 
-.control-panel {
-  display: flex;
-  align-items: center;
+.control-panel-wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -88,6 +86,13 @@
   padding: 16px 32px;
   z-index: 1;
   background-color: white;
+}
+
+.control-panel {
+  display: flex;
+  align-items: center;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .selected-color {

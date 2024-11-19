@@ -161,6 +161,8 @@ export class ColorDropper {
       DOM__magnifierPixels.push(pixel);
     }
 
+    console.info("Magnifier created");
+
     return [DOM__magnifier, DOM__magnifierPixels, DOM__colorText];
   }
 
@@ -178,6 +180,7 @@ export class ColorDropper {
         div.style.backgroundColor = hexArray[index];
       }
     });
+    console.info("Magnifier painted");
   }
 
   private addMagnifier() {
