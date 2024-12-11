@@ -1,4 +1,4 @@
-# Live demote: https://nmitic.github.io/Color-dropper/
+# Live demo: https://nmitic.github.io/Color-dropper/
 ## How to start the project
 
 - Install dependencies by running `npm install`
